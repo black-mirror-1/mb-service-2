@@ -59,8 +59,8 @@ spec:
           sh '''
           export DOCKER_API_VERSION=1.24
           docker run --rm -i -v ~/.aws:/root/.aws amazon/aws-cli ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 693885100167.dkr.ecr.us-east-2.amazonaws.com
-          docker build -t master-builder/sample-service-1 .
-          docker tag master-builder/sample-service-1:latest 693885100167.dkr.ecr.us-east-2.amazonaws.com/master-builder/sample-service-1:v${BUILD_NUMBER}
+          docker build -t master-builder/sample-service-2 .
+          docker tag master-builder/sample-service-2:latest 693885100167.dkr.ecr.us-east-2.amazonaws.com/master-builder/sample-service-2:v${BUILD_NUMBER}
           '''
         }
       }
@@ -70,7 +70,7 @@ spec:
         container(name: 'docker') {
           sh '''
           export DOCKER_API_VERSION=1.24
-          docker push 693885100167.dkr.ecr.us-east-2.amazonaws.com/master-builder/sample-service-1:v${BUILD_NUMBER}
+          docker push 693885100167.dkr.ecr.us-east-2.amazonaws.com/master-builder/sample-service-2:v${BUILD_NUMBER}
           '''
         }
       }
@@ -83,7 +83,7 @@ spec:
             git config --global user.email "you@example.com"
             git config --global user.name "${GIT_USERNAME}"
             cd mb-service-2-deploy
-            sed -i "s/\\/master-builder\\/sample-service-1\\:.*/\\/master-builder\\/sample-service-1:v${BUILD_NUMBER}/g" pre-prod/deployment.yml
+            sed -i "s/\\/master-builder\\/sample-service-2\\:.*/\\/master-builder\\/sample-service-2:v${BUILD_NUMBER}/g" pre-prod/deployment.yml
             git add pre-prod/deployment.yml
             git commit -m 'replacing image tag'
             git push https://${GIT_USERNAME}:${URLEncoder.encode(GIT_PASSWORD, "UTF-8")}@github.com/black-mirror-1/mb-service-2-deploy.git
